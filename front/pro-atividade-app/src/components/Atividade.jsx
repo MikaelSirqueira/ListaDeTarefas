@@ -4,8 +4,11 @@ export default function Atividades(props) {
   function prioridadeLabel(param) {
     switch (param) {
       case 'Baixa':
+        return 'Baixa'
       case 'Normal':
+        return 'Normal'
       case 'Alta':
+        return 'Alta'
       default:
         return "Não definido";
     }
