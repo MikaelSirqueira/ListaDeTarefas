@@ -70,7 +70,7 @@ export default function Atividades(props) {
             </button>
             <button
               className="btn btn-sm btn-outline-danger"
-              onClick={() => props.deletarAtividade(props.ativ.id)}
+              onClick={() => props.handleModalExcluir(props.ativ.id)}
             >
               <i className="fas fa-trash me-2"></i>
               Deletar

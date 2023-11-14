@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, ModalFooter } from "react-bootstrap";
 import AtividadeForm from "./components/AtividadeForm";
 import AtividadeLista from "./components/AtividadeLista";
 import api from "./api/atividade";
@@ -8,9 +8,24 @@ function App() {
   const [atividades, setAtividades] = useState([]);
   const [atividade, setAtividade] = useState({ id: 0 });
   const [showAtividadeModal, setShowAtividadeModal] = useState(false);
+  const [modalExcluir, setModalExcluir] = useState(false);
 
   const handleAtividadeModal = () => {
-    setShowAtividadeModal(!showAtividadeModal)
+    setShowAtividadeModal(!showAtividadeModal);
+  };
+
+  const handleModalExcluir = (id) => {
+    if (id !== 0 & id !== undefined) {
+      const atividade = atividades.filter(
+        (atividade) => atividade.id === id      
+      );
+      setAtividade(atividade[0]);
+    }
+    else {
+      setAtividade({id:0})
+    }
+
+    setModalExcluir(!modalExcluir);
   };
 
   const retornaTodasAtividades = async () => {
@@ -28,14 +43,13 @@ function App() {
 
   const adicionarAtividade = async (ativ) => {
     const response = await api.post("atividade", ativ);
-    console.log('opa')
     setAtividades([...atividades, response.data]);
     handleAtividadeModal();
   };
 
   const cancelarAtividade = () => {
-    clearModalData();    
-  }
+    clearModalData();
+  };
 
   const atualizarAtividade = async (ativ) => {
     const response = await api.put(`atividade/${ativ.id}`, ativ);
@@ -48,6 +62,8 @@ function App() {
   };
 
   const deletarAtividade = async (id) => {
+    handleModalExcluir(0);
+
     if (await api.delete(`atividade/${id}`)) {
       const atividadesFiltradas = atividades.filter(
         (atividade) => atividade.id !== id
@@ -60,12 +76,12 @@ function App() {
     const atividade = atividades.filter((atividade) => atividade.id === id);
     setAtividade(atividade[0]);
     handleAtividadeModal();
-  }
+  };
 
   const clearModalData = () => {
     setAtividade({ id: 0 });
     handleAtividadeModal();
-  }
+  };
 
   return (
     <>
@@ -80,11 +96,14 @@ function App() {
 
       <AtividadeLista
         atividades={atividades}
-        deletarAtividade={deletarAtividade}
+        handleModalExcluir={handleModalExcluir}
         editarAtividade={editarAtividade}
       />
 
-      <Modal show={showAtividadeModal} onHide={handleAtividadeModal}>
+      <Modal 
+        show={showAtividadeModal} 
+        onHide={handleAtividadeModal}
+      >
         <Modal.Header closeButton>
           <Modal.Title>
             Atividade {atividade.id !== 0 ? atividade.id : ""}
@@ -99,6 +118,36 @@ function App() {
             atividades={atividades}
           />
         </Modal.Body>
+      </Modal>
+
+      <Modal 
+        size="sm" 
+        show={modalExcluir} 
+        onHide={handleModalExcluir}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Excluir Atividade{' '} 
+            {atividade.id !== 0 ? atividade.id : ""}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Tem certeza que deseja excluir a atividade {atividade.id}
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-between">
+          <button
+            className="btn btn-outline-success me-2"
+            onClick={() => deletarAtividade(atividade.id)}
+          >
+            Sim
+          </button>
+          <button
+            className="btn btn-danger me-2"
+            onClick={() => handleModalExcluir(0)}
+          >
+            Não
+          </button>
+        </Modal.Footer>
       </Modal>
     </>
   );
