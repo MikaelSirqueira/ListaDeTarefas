@@ -1,65 +1,154 @@
 import { useState, useEffect } from "react";
-import "./App.css";
+import { Button, Modal, ModalFooter } from "react-bootstrap";
 import AtividadeForm from "./components/AtividadeForm";
 import AtividadeLista from "./components/AtividadeLista";
+import api from "./api/atividade";
 
 function App() {
-  const [index, setIndex] = useState(0);
   const [atividades, setAtividades] = useState([]);
   const [atividade, setAtividade] = useState({ id: 0 });
+  const [showAtividadeModal, setShowAtividadeModal] = useState(false);
+  const [modalExcluir, setModalExcluir] = useState(false);
+
+  const handleAtividadeModal = () => {
+    setShowAtividadeModal(!showAtividadeModal);
+  };
+
+  const handleModalExcluir = (id) => {
+    if (id !== 0 & id !== undefined) {
+      const atividade = atividades.filter(
+        (atividade) => atividade.id === id      
+      );
+      setAtividade(atividade[0]);
+    }
+    else {
+      setAtividade({id:0})
+    }
+
+    setModalExcluir(!modalExcluir);
+  };
+
+  const retornaTodasAtividades = async () => {
+    const response = await api.get("atividade");
+    return response.data;
+  };
 
   useEffect(() => {
-    atividades.length <= 0
-      ? setIndex(1)
-      : setIndex(
-          Math.max.apply(
-            Math,
-            atividades.map((item) => item.id)
-          ) + 1
-        );
-  }, [atividades]);
+    const getAtividades = async () => {
+      const todasAtividades = await retornaTodasAtividades();
+      if (todasAtividades) setAtividades(todasAtividades);
+    };
+    getAtividades();
+  }, []);
 
-  function addAtividade(ativ) {
-    setAtividades([...atividades, { ...ativ, id: index }]);
-  }
+  const adicionarAtividade = async (ativ) => {
+    const response = await api.post("atividade", ativ);
+    setAtividades([...atividades, response.data]);
+    handleAtividadeModal();
+  };
 
-  function cancelarAtividade() {
-    setAtividade({ id: 0 });
-  }
+  const cancelarAtividade = () => {
+    clearModalData();
+  };
 
-  function atualizarAtividade(ativ) {
+  const atualizarAtividade = async (ativ) => {
+    const response = await api.put(`atividade/${ativ.id}`, ativ);
+    const { id } = response.data;
     setAtividades(
-      atividades.map((item) => (item.id === ativ.id ? ativ : item))
+      atividades.map((item) => (item.id === id ? response.data : item))
     );
-    setAtividade({ id: 0 });
-  }
+    clearModalData();
+    handleAtividadeModal();
+  };
 
-  function deletarAtividade(id) {
-    const atividadesFiltradas = atividades.filter(
-      (atividade) => atividade.id !== id
-    );
-    setAtividades([...atividadesFiltradas]);
-  }
+  const deletarAtividade = async (id) => {
+    handleModalExcluir(0);
 
-  function editarAtividade(id) {
+    if (await api.delete(`atividade/${id}`)) {
+      const atividadesFiltradas = atividades.filter(
+        (atividade) => atividade.id !== id
+      );
+      setAtividades([...atividadesFiltradas]);
+    }
+  };
+
+  const editarAtividade = (id) => {
     const atividade = atividades.filter((atividade) => atividade.id === id);
     setAtividade(atividade[0]);
-  }
+    handleAtividadeModal();
+  };
+
+  const clearModalData = () => {
+    setAtividade({ id: 0 });
+    handleAtividadeModal();
+  };
 
   return (
     <>
-      <AtividadeForm
-        addAtividade={addAtividade}
-        cancelarAtividade={cancelarAtividade}
-        atualizarAtividade={atualizarAtividade}
-        ativSelecionada={atividade}
-        atividades={atividades}
-      />
+      <div className="d-flex justify-content-between align-items-end mt-2 pb-3 border-bottom border-1">
+        <h1 className="m-0 p-0">
+          Atividade {atividade.id !== 0 ? atividade.id : ""}
+        </h1>
+        <Button variant="outline-secondary" onClick={clearModalData}>
+          <i className="fas fa-plus"></i>
+        </Button>
+      </div>
+
       <AtividadeLista
         atividades={atividades}
-        deletarAtividade={deletarAtividade}
+        handleModalExcluir={handleModalExcluir}
         editarAtividade={editarAtividade}
       />
+
+      <Modal 
+        show={showAtividadeModal} 
+        onHide={handleAtividadeModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Atividade {atividade.id !== 0 ? atividade.id : ""}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AtividadeForm
+            addAtividade={adicionarAtividade}
+            cancelarAtividade={cancelarAtividade}
+            atualizarAtividade={atualizarAtividade}
+            ativSelecionada={atividade}
+            atividades={atividades}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Modal 
+        size="sm" 
+        show={modalExcluir} 
+        onHide={handleModalExcluir}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Excluir Atividade{' '} 
+            {atividade.id !== 0 ? atividade.id : ""}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Tem certeza que deseja excluir a atividade {atividade.id}
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-between">
+          <button
+            className="btn btn-outline-success me-2"
+            onClick={() => deletarAtividade(atividade.id)}
+          >
+            Sim
+          </button>
+          <button
+            className="btn btn-danger me-2"
+            onClick={() => handleModalExcluir(0)}
+          >
+            Não
+          </button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
