@@ -1,11 +1,11 @@
-import AtividadeItem from "./AtividadeItem";
+import AtividadeItem from './AtividadeItem';
 
 export default function AtividadeLista(props) {
   return (
     <>
       <div className="mt-3">
         {props.atividades.map((ativ) => (
-          <AtividadeItem 
+          <AtividadeItem
             key={ativ.id}
             ativ={ativ}
             handleModalExcluir={props.handleModalExcluir}
@@ -14,5 +14,5 @@ export default function AtividadeLista(props) {
         ))}
       </div>
     </>
-  )
+  );
 }

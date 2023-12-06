@@ -1,29 +1,29 @@
-import React from "react";
+import React from 'react';
 
 export default function AtividadeItem(props) {
   function prioridadeLabel(param) {
     switch (param) {
       case 'Baixa':
-        return 'Baixa'
+        return 'Baixa';
       case 'Normal':
-        return 'Normal'
+        return 'Normal';
       case 'Alta':
-        return 'Alta'
+        return 'Alta';
       default:
-        return "Não definido";
+        return 'Não definido';
     }
   }
 
   function prioridadeStyle(param, icon) {
     switch (param) {
-      case  "Baixa":
-        return icon ? "fa-smile" : "success";
-      case  "Normal":
-        return icon ? "fa-meh" : "warning";
-      case "Alta":
-        return icon ? "fa-frown" : "danger";
+      case 'Baixa':
+        return icon ? 'fa-smile' : 'success';
+      case 'Normal':
+        return icon ? 'fa-meh' : 'warning';
+      case 'Alta':
+        return icon ? 'fa-frown' : 'danger';
       default:
-        return "fa-face-meh-blank";
+        return 'fa-face-meh-blank';
     }
   }
 
@@ -31,13 +31,13 @@ export default function AtividadeItem(props) {
     <>
       <div
         className={
-          "card mb-2 shadow-sm border-" + prioridadeStyle(props.ativ.prioridade)
+          'card mb-2 shadow-sm border-' + prioridadeStyle(props.ativ.prioridade)
         }
       >
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h5 className="card-title">
-              <span className="badge bg-secondary me-1">{props.ativ.id}</span>-{" "}
+              <span className="badge bg-secondary me-1">{props.ativ.id}</span>-{' '}
               {props.ativ.titulo}
             </h5>
 
@@ -45,12 +45,12 @@ export default function AtividadeItem(props) {
               Prioridade:
               <span
                 className={
-                  "ms-1 text-" + prioridadeStyle(props.ativ.prioridade)
+                  'ms-1 text-' + prioridadeStyle(props.ativ.prioridade)
                 }
               >
                 <i
                   className={
-                    "me-1 far " + prioridadeStyle(props.ativ.prioridade, true)
+                    'me-1 far ' + prioridadeStyle(props.ativ.prioridade, true)
                   }
                 ></i>
                 {prioridadeLabel(props.ativ.prioridade)}

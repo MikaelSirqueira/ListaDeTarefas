@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const atividadeInicial = {
   id: 0,
-  titulo: "",
+  titulo: '',
   prioridade: 0,
-  descricao: "",
+  descricao: '',
 };
 
 export default function AtividadeForm(props) {
@@ -25,9 +25,8 @@ export default function AtividadeForm(props) {
 
     if (props.ativSelecionada.id !== 0) {
       props.atualizarAtividade(atividade);
-    }
-    else {
-      console.log(atividade)
+    } else {
+      console.log(atividade);
       props.addAtividade(atividade);
     }
 
@@ -36,7 +35,7 @@ export default function AtividadeForm(props) {
 
   const handleCancelar = (e) => {
     e.preventDefault();
-    
+
     props.cancelarAtividade();
     setAtividade(atividadeInicial);
   };
