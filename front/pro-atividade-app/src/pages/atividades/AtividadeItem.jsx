@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Atividades(props) {
+export default function AtividadeItem(props) {
   function prioridadeLabel(param) {
     switch (param) {
       case 'Baixa':
