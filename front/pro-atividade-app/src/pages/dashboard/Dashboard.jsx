@@ -1,5 +1,5 @@
-import TitlePage from "../../components/TitlePage";
-import { Card, Row, Col } from "react-bootstrap";
+import TitlePage from '../../components/TitlePage';
+import { Card, Row, Col } from 'react-bootstrap';
 
 export default function Dashboard() {
   return (
@@ -19,7 +19,7 @@ export default function Dashboard() {
           </Col>
           <Col>
             <Card border="secondary">
-              <Card.Header bg={"danger"}>Atividades totais</Card.Header>
+              <Card.Header bg={'danger'}>Atividades totais</Card.Header>
               <Card.Body>
                 <Card.Title>
                   <h1 className="text-center">256</h1>

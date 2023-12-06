@@ -1,49 +1,49 @@
-import { useState } from "react";
-import TitlePage from "../../components/TitlePage";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useState } from 'react';
+import TitlePage from '../../components/TitlePage';
+import { Button, FormControl, InputGroup } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
 const clientes = [
   {
     id: 1,
-    nome: "microsoft",
-    responsavel: "Otto",
-    contato: "3221",
-    situacao: "Ativo",
+    nome: 'microsoft',
+    responsavel: 'Otto',
+    contato: '3221',
+    situacao: 'Ativo',
   },
   {
     id: 2,
-    nome: "amazon",
-    responsavel: "jeff",
-    contato: "7788",
-    situacao: "Desativado",
+    nome: 'amazon',
+    responsavel: 'jeff',
+    contato: '7788',
+    situacao: 'Desativado',
   },
   {
     id: 3,
-    nome: "google",
-    responsavel: "besos",
-    contato: "6666",
-    situacao: "Em análise",
+    nome: 'google',
+    responsavel: 'besos',
+    contato: '6666',
+    situacao: 'Em análise',
   },
   {
     id: 4,
-    nome: "facebook",
-    responsavel: "zack",
-    contato: "3333",
-    situacao: "Ativo",
+    nome: 'facebook',
+    responsavel: 'zack',
+    contato: '3333',
+    situacao: 'Ativo',
   },
   {
     id: 5,
-    nome: "twiiter",
-    responsavel: "jack",
-    contato: "2211",
-    situacao: "Ativo",
+    nome: 'twiiter',
+    responsavel: 'jack',
+    contato: '2211',
+    situacao: 'Ativo',
   },
 ];
 
 export default function ClienteLista() {
   const history = useHistory();
-  const [termoBusca, setTermoBusca] = useState("");
+  const [termoBusca, setTermoBusca] = useState('');
 
   const buscaCliente = (e) => {
     setTermoBusca(e.target.value);
@@ -52,13 +52,13 @@ export default function ClienteLista() {
 
   const clientesFiltrados = clientes.filter((cliente) => {
     return Object.values(cliente)
-      .join(" ")
+      .join(' ')
       .toLowerCase()
       .includes(termoBusca.toLocaleLowerCase());
   });
 
   const novoCliente = () => {
-    history.push("/cliente/detalhe");
+    history.push('/cliente/detalhe');
   };
 
   return (
