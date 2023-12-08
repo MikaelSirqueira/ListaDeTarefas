@@ -4,10 +4,18 @@ import AtividadeForm from './AtividadeForm';
 import AtividadeLista from './AtividadeLista';
 import api from '../../api/atividade';
 import TitlePage from '../../components/TitlePage';
+import { IAtividade, Prioridade } from '../../model/atividade';
 
-export default function Atividade() {
-  const [atividades, setAtividades] = useState([]);
-  const [atividade, setAtividade] = useState({ id: 0 });
+const atividadeInicial: IAtividade = {
+  id: 0,
+  titulo: '',
+  prioridade: Prioridade.NaoDefinido,
+  descricao: '',
+};
+
+const Atividade = () => {
+  const [atividades, setAtividades] = useState<IAtividade[]>([]);
+  const [atividade, setAtividade] = useState<IAtividade>(atividadeInicial);
   const [showAtividadeModal, setShowAtividadeModal] = useState(false);
   const [modalExcluir, setModalExcluir] = useState(false);
 
@@ -24,7 +32,7 @@ export default function Atividade() {
     return response.data;
   };
 
-  const adicionarAtividade = async (ativ) => {
+  const adicionarAtividade = async (ativ: IAtividade) => {
     const response = await api.post('atividade', ativ);
     setAtividades([...atividades, response.data]);
     handleAtividadeModal();
@@ -34,7 +42,7 @@ export default function Atividade() {
     clearModalData();
   };
 
-  const atualizarAtividade = async (ativ) => {
+  const atualizarAtividade = async (ativ: IAtividade) => {
     const response = await api.put(`atividade/${ativ.id}`, ativ);
     const { id } = response.data;
     setAtividades(
@@ -44,25 +52,14 @@ export default function Atividade() {
     handleAtividadeModal();
   };
 
-  const deletarAtividade = async (id) => {
-    handleModalExcluir(0);
-
-    if (await api.delete(`atividade/${id}`)) {
-      const atividadesFiltradas = atividades.filter(
-        (atividade) => atividade.id !== id,
-      );
-      setAtividades([...atividadesFiltradas]);
-    }
-  };
-
-  const editarAtividade = (id) => {
+  const editarAtividade = (id: number) => {
     const atividade = atividades.filter((atividade) => atividade.id === id);
     setAtividade(atividade[0]);
     handleAtividadeModal();
   };
 
   const clearModalData = () => {
-    setAtividade({ id: 0 });
+    setAtividade(atividadeInicial);
     handleAtividadeModal();
   };
 
@@ -70,15 +67,26 @@ export default function Atividade() {
     setShowAtividadeModal(!showAtividadeModal);
   };
 
-  const handleModalExcluir = (id) => {
-    if ((id !== 0) & (id !== undefined)) {
+  const handleConfirmarModalExcluir = (id: number) => {
+    if (id !== 0 && id !== undefined) {
       const atividade = atividades.filter((atividade) => atividade.id === id);
       setAtividade(atividade[0]);
     } else {
-      setAtividade({ id: 0 });
+      setAtividade(atividadeInicial);
     }
 
     setModalExcluir(!modalExcluir);
+  };
+
+  const deletarAtividade = async (id: number) => {
+    handleConfirmarModalExcluir(0);
+
+    if (await api.delete(`atividade/${id}`)) {
+      const atividadesFiltradas = atividades.filter(
+        (atividade) => atividade.id !== id,
+      );
+      setAtividades([...atividadesFiltradas]);
+    }
   };
 
   return (
@@ -93,7 +101,7 @@ export default function Atividade() {
 
       <AtividadeLista
         atividades={atividades}
-        handleModalExcluir={handleModalExcluir}
+        handleConfirmarModalExcluir={handleConfirmarModalExcluir}
         editarAtividade={editarAtividade}
       />
 
@@ -109,12 +117,15 @@ export default function Atividade() {
             cancelarAtividade={cancelarAtividade}
             atualizarAtividade={atualizarAtividade}
             ativSelecionada={atividade}
-            atividades={atividades}
           />
         </Modal.Body>
       </Modal>
 
-      <Modal size="sm" show={modalExcluir} onHide={handleModalExcluir}>
+      <Modal
+        size="sm"
+        show={modalExcluir}
+        onHide={() => handleConfirmarModalExcluir(0)}
+      >
         <Modal.Header closeButton>
           <Modal.Title>
             Excluir Atividade {atividade.id !== 0 ? atividade.id : ''}
@@ -132,7 +143,7 @@ export default function Atividade() {
           </button>
           <button
             className="btn btn-danger me-2"
-            onClick={() => handleModalExcluir(0)}
+            onClick={() => handleConfirmarModalExcluir(0)}
           >
             Não
           </button>
@@ -140,4 +151,6 @@ export default function Atividade() {
       </Modal>
     </>
   );
-}
+};
+
+export default Atividade;
