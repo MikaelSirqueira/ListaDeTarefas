@@ -9,7 +9,7 @@
 - Mais pra frente pretendo incrementar/finalizar com a parte do dashboard dinamico exibindo os dados exatos e os cliente só podendo visualizar as tarefas correspondentes a eles.
   
 - Desenvolvido toda parte front-end e back-end do projeto.
-- Conceitos sobre React, JavaScript, TypeScript, API com Asp.Net, C#, MySQL e a alteração da versão das tecnologias utilizadas foram explorados neste projeto.
+- Conceitos sobre React, JavaScript, TypeScript, RestFullAPI com Asp.Net, C#, MySQL e a alteração da versão das tecnologias utilizadas foram explorados neste projeto.
   
 </p>
 
@@ -17,7 +17,7 @@
 
 ## 🚀 Tecnologias
 
-Esta API foi desenvolvida utilizando:
+Este projeto foi desenvolvido utilizando:
 - React
 - JavaScript
 - TypeScript
