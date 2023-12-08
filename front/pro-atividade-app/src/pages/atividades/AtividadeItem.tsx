@@ -1,20 +1,24 @@
 import React from 'react';
+import { AtividadeItemProps } from '../../model/atividadesProps';
+import { Prioridade } from '../../model/atividade';
 
-export default function AtividadeItem(props) {
-  function prioridadeLabel(param) {
+const AtividadeItem: React.FC<AtividadeItemProps> = ({
+  ativ,
+  editarAtividade,
+  handleConfirmarModalExcluir,
+}: AtividadeItemProps) => {
+  function prioridadeLabel(param: string) {
     switch (param) {
-      case 'Baixa':
-        return 'Baixa';
-      case 'Normal':
-        return 'Normal';
-      case 'Alta':
-        return 'Alta';
+      case Prioridade.Baixa:
+      case Prioridade.Normal:
+      case Prioridade.Alta:
+        return param;
       default:
-        return 'Não definido';
+        return Prioridade.NaoDefinido;
     }
   }
 
-  function prioridadeStyle(param, icon) {
+  function prioridadeStyle(param: string, icon: boolean) {
     switch (param) {
       case 'Baixa':
         return icon ? 'fa-smile' : 'success';
@@ -31,46 +35,47 @@ export default function AtividadeItem(props) {
     <>
       <div
         className={
-          'card mb-2 shadow-sm border-' + prioridadeStyle(props.ativ.prioridade)
+          'card mb-2 shadow-sm border-' +
+          prioridadeStyle(ativ.prioridade, false)
         }
       >
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h5 className="card-title">
-              <span className="badge bg-secondary me-1">{props.ativ.id}</span>-{' '}
-              {props.ativ.titulo}
+              <span className="badge bg-secondary me-1">{ativ.id}</span>-{' '}
+              {ativ.titulo}
             </h5>
 
             <h6>
               Prioridade:
               <span
                 className={
-                  'ms-1 text-' + prioridadeStyle(props.ativ.prioridade)
+                  'ms-1 text-' + prioridadeStyle(ativ.prioridade, false)
                 }
               >
                 <i
                   className={
-                    'me-1 far ' + prioridadeStyle(props.ativ.prioridade, true)
+                    'me-1 far ' + prioridadeStyle(ativ.prioridade, true)
                   }
                 ></i>
-                {prioridadeLabel(props.ativ.prioridade)}
+                {prioridadeLabel(ativ.prioridade)}
               </span>
             </h6>
           </div>
 
-          <p className="card-text">{props.ativ.descricao}</p>
+          <p className="card-text">{ativ.descricao}</p>
 
           <div className="d-flex justify-content-end border-top pt-2 m-0">
             <button
               className="btn btn-sm btn-outline-primary me-2"
-              onClick={() => props.editarAtividade(props.ativ.id)}
+              onClick={() => editarAtividade(ativ.id)}
             >
               <i className="fas fa-pen me-2"></i>
               Editar
             </button>
             <button
               className="btn btn-sm btn-outline-danger"
-              onClick={() => props.handleModalExcluir(props.ativ.id)}
+              onClick={() => handleConfirmarModalExcluir(ativ.id)}
             >
               <i className="fas fa-trash me-2"></i>
               Deletar
@@ -80,4 +85,6 @@ export default function AtividadeItem(props) {
       </div>
     </>
   );
-}
+};
+
+export default AtividadeItem;

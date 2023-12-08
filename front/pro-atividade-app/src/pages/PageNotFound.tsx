@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function PageNotFound() {
+const PageNotFound = () => {
   return (
     <div>
       <h1 className="mt-4 mb-4 text-center">
@@ -16,4 +16,6 @@ export default function PageNotFound() {
       </h1>
     </div>
   );
-}
+};
+
+export default PageNotFound;

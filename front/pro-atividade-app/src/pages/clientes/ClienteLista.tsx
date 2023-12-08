@@ -41,13 +41,12 @@ const clientes = [
   },
 ];
 
-export default function ClienteLista() {
+const ClienteLista: React.FC = () => {
   const navigate = useNavigate();
   const [termoBusca, setTermoBusca] = useState('');
 
-  const buscaCliente = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTermoBusca(e.target.value);
-    console.log(termoBusca);
   };
 
   const clientesFiltrados = clientes.filter((cliente) => {
@@ -72,7 +71,7 @@ export default function ClienteLista() {
       <InputGroup className="mb-3 mt-3">
         <InputGroup.Text>Buscar:</InputGroup.Text>
         <FormControl
-          onChange={buscaCliente}
+          onChange={handleInputChange}
           placeholder="Buscar por nome do cliente"
         ></FormControl>
       </InputGroup>
@@ -116,4 +115,6 @@ export default function ClienteLista() {
       </table>
     </>
   );
-}
+};
+
+export default ClienteLista;
